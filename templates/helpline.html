@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Premium Apple-inspired Helpline Design */
+    body {
+        background: radial-gradient(circle at 50% 0%, #1c1c1e 0%, #000000 100%);
+        min-height: 100vh;
+        color: #ffffff;
+    }
+
+    .helpline-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 100px 24px;
+        animation: appleFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .helpline-card-main {
+        background: rgba(28, 28, 30, 0.6);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 60px;
+        width: 100%;
+        max-width: 900px;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    }
+
+    .helpline-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .helpline-header h2 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        letter-spacing: -0.022em;
+        margin-bottom: 20px;
+        background: linear-gradient(180deg, #FFFFFF 0%, #A0AEC0 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .helpline-header p {
+        color: #8E8E93;
+        font-size: 1.25rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    .helpline-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 24px;
+    }
+
+    .contact-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .contact-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        transform: scale(1.02);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .contact-card.critical {
+        background: rgba(255, 45, 85, 0.1);
+        border-color: rgba(255, 45, 85, 0.2);
+    }
+
+    .contact-card.critical:hover {
+        background: rgba(255, 45, 85, 0.15);
+        border-color: rgba(255, 45, 85, 0.4);
+    }
+
+    .contact-card h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .contact-card .number {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #3DEAB2;
+        letter-spacing: -0.01em;
+    }
+
+    .contact-card.critical .number {
+        color: #FF2D55;
+    }
+
+    .contact-card .desc {
+        font-size: 1rem;
+        color: #8E8E93;
+        line-height: 1.4;
+    }
+
+    .info-bar {
+        margin-top: 60px;
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-align: center;
+        font-size: 0.95rem;
+        color: #8E8E93;
+    }
+
+    @keyframes appleFadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+        .helpline-card-main { padding: 32px; }
+        .helpline-header h2 { font-size: 2.4rem; }
+        .helpline-grid { grid-template-columns: 1fr; }
+    }
+</style>
+
+<div class="helpline-page">
+    <div class="helpline-card-main">
+        <div class="helpline-header">
+            <h2>You're not alone.</h2>
+            <p>If you're in a moment of crisis or need immediate professional support, help is just a call away.</p>
+        </div>
+
+        <div class="helpline-grid">
+            <div class="contact-card critical">
+                <h3>🚑 Emergency Services</h3>
+                <p class="number">112</p>
+                <p class="desc">General Emergency Services (India)</p>
+            </div>
+
+            <div class="contact-card">
+                <h3>🌙 Vandrevala Foundation</h3>
+                <p class="number">1860-266-2345</p>
+                <p class="desc">Free, 24/7 Mental Health Support & Crisis Intervention</p>
+            </div>
+
+            <div class="contact-card">
+                <h3>🌿 iCall</h3>
+                <p class="number">9152987821</p>
+                <p class="desc">Professional psychosocial support (Mon–Sat, 10 AM – 8 PM)</p>
+            </div>
+
+            <div class="contact-card">
+                <h3>🛡️ AASRA</h3>
+                <p class="number">9820466726</p>
+                <p class="desc">24/7 Suicide Prevention and Emotional Support Helpline</p>
+            </div>
+        </div>
+
+        <div class="info-bar">
+            <strong>Medical Note:</strong> MindGuard is a supportive detection tool. We do not provide clinical diagnosis. Please always consult a psychiatric professional for medical care.
+        </div>
+    </div>
+</div>
+{% endblock %}
