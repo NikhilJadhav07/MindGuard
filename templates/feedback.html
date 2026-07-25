@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Premium Apple-inspired Feedback Design */
+    body {
+        background: radial-gradient(circle at 50% 0%, #1c1c1e 0%, #000000 100%);
+        min-height: 100vh;
+        color: #ffffff;
+    }
+
+    .feedback-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 100px 24px;
+        animation: appleFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .feedback-card {
+        background: rgba(28, 28, 30, 0.6);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 60px;
+        width: 100%;
+        max-width: 800px;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    }
+
+    .feedback-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .feedback-header h2 {
+        font-size: 3rem;
+        font-weight: 700;
+        letter-spacing: -0.022em;
+        margin-bottom: 16px;
+        background: linear-gradient(180deg, #FFFFFF 0%, #A0AEC0 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .feedback-header p {
+        color: #8E8E93;
+        font-size: 1.2rem;
+        font-weight: 400;
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    /* Form Design */
+    .form-group {
+        margin-bottom: 40px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #FFFFFF;
+        margin-bottom: 16px;
+        padding-left: 4px;
+    }
+
+    .styled-input, .styled-textarea {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 16px 20px;
+        color: #FFFFFF;
+        font-size: 1.05rem;
+        font-family: inherit;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .styled-input:focus, .styled-textarea:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(61, 234, 178, 0.5);
+        box-shadow: 0 0 0 4px rgba(61, 234, 178, 0.1);
+    }
+
+    /* Rating Grid */
+    .rating-grid {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .rating-option { display: none; }
+
+    .rating-label {
+        flex: 1;
+        text-align: center;
+        padding: 20px 0;
+        font-size: 2rem;
+        cursor: pointer;
+        border-radius: 12px;
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        filter: grayscale(100%);
+        opacity: 0.3;
+        background: transparent;
+    }
+
+    .rating-label:hover {
+        opacity: 0.8;
+        filter: grayscale(0%);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .rating-option:checked + .rating-label {
+        opacity: 1;
+        filter: grayscale(0%);
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Range Slider */
+    .slider-container {
+        padding: 10px 4px;
+    }
+
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        background: #FFFFFF;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        width: 100%;
+        padding: 20px;
+        background: white;
+        color: black;
+        font-size: 1.25rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+        transform: scale(1.02);
+        background: #3DEAB2;
+        box-shadow: 0 20px 40px rgba(61, 234, 178, 0.3);
+    }
+
+    /* History Cards */
+    .history-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 24px;
+        margin-bottom: 16px;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .history-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateY(-2px);
+    }
+
+    .history-date {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #8E8E93;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    @keyframes appleFadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .feedback-card { padding: 32px; }
+        .feedback-header h2 { font-size: 2.2rem; }
+    }
+</style>
+
+<div class="feedback-page">
+    <div class="feedback-card">
+        <div class="feedback-header">
+            <h2>Evolving together.</h2>
+            <p>Your feedback helps MindGuard understand you better and provide more accurate support.</p>
+        </div>
+
+        <form action="{{ url_for('feedback') }}" method="POST">
+            <div class="form-group">
+                <label for="assessment_id">Select Assessment</label>
+                <select name="assessment_id" id="assessment_id" class="styled-input" required>
+                    <option value="" disabled selected>Recent sessions...</option>
+                    {% for a in assessments %}
+                    <option value="{{ a.id }}">{{ a.created_at.strftime('%B %d, %Y') }} - {{ a.result_type|capitalize }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>How accurately did I reflect your feelings?</label>
+                <div class="rating-grid">
+                    <input type="radio" name="accuracy_rating" id="acc-1" value="1" class="rating-option">
+                    <label for="acc-1" class="rating-label">😢</label>
+
+                    <input type="radio" name="accuracy_rating" id="acc-2" value="2" class="rating-option">
+                    <label for="acc-2" class="rating-label">😐</label>
+
+                    <input type="radio" name="accuracy_rating" id="acc-3" value="3" class="rating-option">
+                    <label for="acc-3" class="rating-label">🙂</label>
+
+                    <input type="radio" name="accuracy_rating" id="acc-4" value="4" class="rating-option">
+                    <label for="acc-4" class="rating-label">😁</label>
+
+                    <input type="radio" name="accuracy_rating" id="acc-5" value="5" class="rating-option" checked>
+                    <label for="acc-5" class="rating-label">🤩</label>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="form-group">
+                    <label>Confidence Before</label>
+                    <div class="slider-container">
+                        <input type="range" name="user_confidence_before" min="1" max="10" value="5">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Confidence After</label>
+                    <div class="slider-container">
+                        <input type="range" name="user_confidence_after" min="1" max="10" value="5">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="feedback-content">Share Your Thoughts</label>
+                <textarea id="feedback-content" name="content" class="styled-textarea" 
+                    placeholder="Tell us about your experience..." style="min-height: 140px;"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" style="background:#3DEAB2">Update My Learning Profile</button>
+        </form>
+
+        {% if feedbacks %}
+        <div style="margin-top: 80px;">
+            <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 32px;">Your History</h3>
+            {% for fb in feedbacks %}
+            {% set border_color = '#3DEAB2' if fb.accuracy_rating >= 4 else '#837cf0' if fb.accuracy_rating >= 3 else '#ff3b30' %}
+            <div class="history-card" style="border-left: 4px solid {{ border_color }};">
+                <span class="history-date">{{ fb.created_at.strftime('%B %d, %Y') }}</span>
+                <p style="color: #ffffff; line-height: 1.5; margin: 0;">{{ fb.free_text_feedback if fb.free_text_feedback else "No text provided." }}</p>
+                <div style="margin-top: 12px; font-size: 0.85rem; color: #8E8E93; display: flex; gap: 16px;">
+                    <span>Accuracy: {{ fb.accuracy_rating }}/5</span>
+                    <span>Relevance: {{ fb.emotional_relevance_score }}/5</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
