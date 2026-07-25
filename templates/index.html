@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="homepage-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content fade-in">
+            <div class="brand-tag">Introducing MindGuard AI</div>
+            <h1>Empowering your <br> <span class="highlight-text">emotional journey.</span></h1>
+            <p class="hero-subtext">
+                MindGuard provides a safe, anonymous, and AI-driven space to analyze your mental wellbeing. 
+                Get professional-grade insights in minutes, powered by advanced NLP.
+            </p>
+            <div class="hero-actions">
+                <a href="{{ url_for('interview') }}" class="btn btn-primary btn-large">Start Assessment</a>
+                <a href="{{ url_for('chatbot') }}" class="btn btn-outline btn-large">Speak with MindGuard</a>
+            </div>
+            
+            <div class="hero-stats mt-5">
+                <div class="stat-item">
+                    <span class="stat-value">100%</span>
+                    <span class="stat-label">Anonymous</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-value">AI</span>
+                    <span class="stat-label">Powered</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-value">Free</span>
+                    <span class="stat-label">Access</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-visual fade-in-delayed">
+            <!-- An abstract or peaceful visual could go here, for now using just layout spacing -->
+            <div class="floating-orb"></div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-wrapper fade-in-delayed">
+        <h2 class="section-title text-center mb-5">Why choose MindGuard?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon-box">🔒</div>
+                <div class="card-content">
+                    <h3>Privacy First</h3>
+                    <p>Your data is processed locally within our secure ecosystem. No records are shared or stored without your control.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box">🧠</div>
+                <div class="card-content">
+                    <h3>Advanced AI Logic</h3>
+                    <p>Leveraging state-of-the-art NLP and scoring algorithms to identify patterns from minor stress to severe burnout.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box">⚡</div>
+                <div class="card-content">
+                    <h3>Actionable Insights</h3>
+                    <p>Receive comprehensive, easy-to-understand reports with immediate steps to improve your mental resilience.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .homepage-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 120px;
+        padding-bottom: 150px;
+    }
+
+    .brand-tag {
+        display: inline-block;
+        padding: 8px 16px;
+        background: rgba(61, 234, 178, 0.1);
+        color: #3DEAB2;
+        border-radius: 100px;
+        font-size: 14px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(61, 234, 178, 0.2);
+    }
+
+    .hero-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 60px;
+        margin-bottom: 150px;
+    }
+
+    .hero-content {
+        flex: 1;
+        max-width: 650px;
+    }
+
+    .hero-content h1 {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 30px;
+        color: #FFFFFF;
+    }
+
+    .highlight-text {
+        background: linear-gradient(135deg, #3DEAB2 0%, #20BFA9 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtext {
+        font-size: 20px;
+        color: #A0AEC0;
+        line-height: 1.6;
+        margin-bottom: 45px;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 20px;
+    }
+
+    .btn-large {
+        padding: 18px 40px;
+        font-size: 18px;
+        font-weight: 700;
+        border-radius: 100px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: #3DEAB2;
+        color: #0B0E11;
+        box-shadow: 0 10px 30px rgba(61, 234, 178, 0.3);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: #20BFA9;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(61, 234, 178, 0.4);
+    }
+
+    .btn-outline {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: #FFFFFF;
+        transform: translateY(-3px);
+    }
+
+    .hero-stats {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #FFFFFF;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .stat-divider {
+        width: 1px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Floating Orb Visual */
+    .hero-visual {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .floating-orb {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle at 30% 30%, #3DEAB2, #20BFA9);
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.15;
+        animation: float 10s infinite ease-in-out;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(20px, -20px) scale(1.1); }
+    }
+
+    /* Features */
+    .features-wrapper {
+        position: relative;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 40px;
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(61, 234, 178, 0.3);
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .icon-box {
+        width: 60px;
+        height: 60px;
+        background: rgba(61, 234, 178, 0.1);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+    .feature-card h3 {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #FFFFFF;
+    }
+
+    .feature-card p {
+        color: #A0AEC0;
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    @media (max-width: 992px) {
+        .hero-section { flex-direction: column; text-align: center; margin-bottom: 80px; }
+        .hero-content { max-width: 100%; }
+        .hero-actions { justify-content: center; }
+        .hero-stats { justify-content: center; }
+        .features-grid { grid-template-columns: 1fr; }
+        .hero-content h1 { font-size: 48px; }
+    }
+</style>
+{% endblock %}
+
