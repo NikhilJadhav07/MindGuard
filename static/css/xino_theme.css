@@ -1,0 +1,294 @@
+:root {
+    --xino-bg: #000000;
+    --xino-card: rgba(28, 28, 30, 0.6);
+    --xino-accent: #3DEAB2;
+    --xino-accent-glow: rgba(61, 234, 178, 0.2);
+    --xino-text-primary: #FFFFFF;
+    --xino-text-secondary: #8E8E93;
+    --xino-bubble-user: linear-gradient(180deg, #3DEAB2 0%, #20BFA9 100%);
+    --xino-bubble-bot: rgba(44, 44, 46, 0.8);
+    --xino-border: rgba(255, 255, 255, 0.1);
+}
+
+body.xino-theme {
+    background-color: var(--xino-bg);
+    color: var(--xino-text-primary);
+    background: radial-gradient(circle at 50% 0%, #1c1c1e 0%, #000000 100%);
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.xino-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Welcome Screen */
+.xino-welcome {
+    flex: 1;
+    text-align: center;
+    animation: appleFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.xino-welcome h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.022em;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.xino-welcome .sub {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--xino-text-secondary);
+    margin-bottom: 60px;
+}
+
+.xino-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.xino-category-card {
+    background: var(--xino-card);
+    border: 1px solid var(--xino-border);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.xino-category-card:hover {
+    background: rgba(44, 44, 46, 0.8);
+    transform: scale(1.02);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.xino-category-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.xino-category-info h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.xino-category-info p {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--xino-text-secondary);
+}
+
+/* Chat Header */
+.xino-chat-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 0;
+    position: relative;
+    border-bottom: 1px solid var(--xino-border);
+}
+
+.xino-chat-header .title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    opacity: 0.8;
+}
+
+.chat-layout.xino-style {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Chat Window */
+.chat-window.xino-style {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 32px 0;
+    box-shadow: none;
+    overflow-y: auto;
+}
+
+/* Messages */
+.message.xino-style {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    max-width: 85%;
+    animation: appleSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.message.user.xino-style {
+    flex-direction: row-reverse;
+    align-self: flex-end;
+}
+
+.message.bot.xino-style {
+    align-self: flex-start;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.bubble {
+    padding: 14px 20px;
+    border-radius: 22px;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    position: relative;
+}
+
+.message.user.xino-style .bubble {
+    background: var(--xino-bubble-user);
+    color: #000;
+    font-weight: 500;
+    border-bottom-right-radius: 4px;
+}
+
+.message.bot.xino-style .bubble {
+    background: var(--xino-bubble-bot);
+    color: #FFFFFF;
+    border: 1px solid var(--xino-border);
+    border-bottom-left-radius: 4px;
+    backdrop-filter: blur(20px);
+}
+
+.sender-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--xino-text-secondary);
+    margin-bottom: 6px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Input Area */
+.xino-input-container {
+    padding: 24px 0 40px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: transparent;
+    width: 100%;
+    margin-top: auto;
+}
+
+.xino-input-wrapper {
+    flex: 1;
+    background: rgba(28, 28, 30, 0.8);
+    border: 1px solid var(--xino-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 30px;
+    padding: 4px 12px 4px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.xino-input-wrapper:focus-within {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.xino-input-wrapper input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.05rem;
+    padding: 12px 0;
+}
+
+.xino-input-wrapper input:focus {
+    outline: none;
+}
+
+.send-btn-round {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    color: black;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.send-btn-round:hover {
+    transform: scale(1.1);
+    background: var(--xino-accent);
+}
+
+/* Animations */
+@keyframes appleFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes appleSlideIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Scrollbar */
+.chat-window.xino-style::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-window.xino-style::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* Utility Classes */
+.hidden { display: none !important; }
+
+.xino-listening {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
