@@ -1,0 +1,663 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Include Symptomate CSS for foundational styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/symptomate.css') }}">
+
+<style>
+    /* Premium Clean Theme */
+    body {
+        background: radial-gradient(circle at 50% -20%, #1a2a24 0%, #0B0E11 70%);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-y: auto !important;
+        font-family: 'Outfit', sans-serif;
+        color: #FFFFFF;
+    }
+
+    .navbar {
+        background: rgba(11, 14, 17, 0.6) !important;
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .result-outer-container {
+        padding: 60px 20px;
+        max-width: 960px;
+        margin: 0 auto;
+    }
+
+    /* Minimalist Hero Section */
+    .hero-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 50px;
+        padding: 50px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 40px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .hero-content {
+        flex: 1;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 100px;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        margin-bottom: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-badge.attention {
+        color: #EF4444;
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .status-badge.stable {
+        color: #3DEAB2;
+        border-color: rgba(61, 234, 178, 0.3);
+    }
+
+    .hero-title {
+        font-size: 48px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 20px;
+        color: #FFFFFF;
+    }
+
+    .hero-subtitle {
+        font-size: 19px;
+        color: #A0AEC0;
+        margin-bottom: 24px;
+        line-height: 1.6;
+    }
+
+    .hero-illustration {
+        flex: 0 0 320px;
+    }
+
+    .hero-illustration img {
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+        filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
+    }
+
+    /* Clean Card System */
+    .section-card {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 32px;
+        padding: 40px;
+        margin-bottom: 32px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+    }
+
+    .section-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 35px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: #FFFFFF;
+    }
+
+    .section-title::before {
+        content: '';
+        width: 6px;
+        height: 28px;
+        background: #3DEAB2;
+        border-radius: 10px;
+    }
+
+    /* Summary Indicators */
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .indicator-card {
+        padding: 24px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .indicator-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .indicator-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-mood {
+        background: rgba(61, 234, 178, 0.1);
+        color: #3DEAB2;
+    }
+
+    .icon-interest {
+        background: rgba(139, 92, 246, 0.1);
+        color: #A78BFA;
+    }
+
+    .icon-energy {
+        background: rgba(245, 158, 11, 0.1);
+        color: #F87171;
+    }
+
+    .indicator-label {
+        font-size: 15px;
+        font-weight: 600;
+        color: #A0AEC0;
+    }
+
+    .indicator-state {
+        font-size: 22px;
+        font-weight: 800;
+        color: #FFFFFF;
+    }
+
+    /* Progress Analysis */
+    .analysis-list {
+        display: flex;
+        flex-wrap: wrap;
+        /* Allow wrapping on small screens */
+        gap: 40px;
+        justify-content: space-around;
+        /* Center items */
+        margin-top: 20px;
+    }
+
+    .analysis-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .analysis-label {
+        font-weight: 600;
+        color: #FFFFFF;
+        font-size: 16px;
+    }
+
+    /* Radial Progress */
+    .radial-progress {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: conic-gradient(var(--color) var(--percentage), rgba(255, 255, 255, 0.05) 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: all 0.5s ease;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .radial-progress::before {
+        content: '';
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        background: #12161b;
+        border-radius: 50%;
+    }
+
+    .radial-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .radial-value {
+        font-weight: 800;
+        font-size: 24px;
+        color: #FFFFFF;
+    }
+
+    .radial-severity {
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        color: #94a3b8;
+        margin-top: 4px;
+    }
+
+    .analysis-status {
+        /* Deprecated logic, now inside radial */
+        display: none;
+    }
+
+    /* Text-Only Recommendations */
+    .rec-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .rec-layout {
+        width: 100%;
+    }
+
+    .rec-item {
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 20px;
+        border-left: 5px solid #3DEAB2;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .rec-item:hover {
+        transform: translateX(6px);
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(61, 234, 178, 0.3);
+    }
+
+    .rec-title {
+        font-size: 19px;
+        font-weight: 700;
+        color: #FFFFFF;
+        margin-bottom: 8px;
+    }
+
+    .rec-desc {
+        font-size: 15px;
+        color: #A0AEC0;
+        line-height: 1.6;
+    }
+
+    .rec-meta {
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #3DEAB2;
+        background: rgba(61, 234, 178, 0.1);
+        padding: 6px 12px;
+        border-radius: 8px;
+        white-space: nowrap;
+    }
+
+    .footer-actions {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .btn-minimal {
+        display: inline-block;
+        padding: 16px 36px;
+        background: #3DEAB2;
+        color: #0B0E11;
+        text-decoration: none;
+        border-radius: 100px;
+        font-weight: 700;
+        transition: all 0.3s;
+        box-shadow: 0 10px 20px rgba(61, 234, 178, 0.2);
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-minimal:hover {
+        background: #20BFA9;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(61, 234, 178, 0.3);
+    }
+
+    /* Answers Section */
+    .answers-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .answer-item {
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.2s;
+    }
+
+    .answer-item:hover {
+        background: rgba(255, 255, 255, 0.04);
+        transform: translateX(6px);
+    }
+
+    .answer-question {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .answer-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        background: #3b82f6;
+        color: white;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .answer-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #FFFFFF;
+        line-height: 1.5;
+    }
+
+    .answer-response {
+        padding-left: 44px;
+    }
+
+    .answer-value {
+        display: inline-block;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        font-size: 15px;
+        color: #FFFFFF;
+        font-weight: 500;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Animation */
+    .slide-up {
+        animation: slideUp 0.8s cubic-bezier(0, 0.55, 0.45, 1) forwards;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-banner {
+            flex-direction: column;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .hero-illustration {
+            order: -1;
+            flex-basis: auto;
+            width: 200px;
+        }
+
+        .summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .analysis-item {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .analysis-status {
+            text-align: left;
+        }
+
+        .answer-question {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .answer-response {
+            padding-left: 0;
+        }
+
+        .answer-text {
+            font-size: 15px;
+        }
+    }
+</style>
+
+<div class="result-outer-container">
+    <!-- 1. Minimal Header -->
+    <div class="hero-banner slide-up">
+        <div class="hero-content">
+            <div
+                class="status-badge {% if top_severity in ['High', 'Severe', 'Moderate', 'Moderately Severe'] %}attention{% else %}stable{% endif %}">
+                {% if top_severity in ['High', 'Severe', 'Moderate', 'Moderately Severe'] %}
+                ⚠️ Attention Recommended
+                {% else %}
+                ✓ Emotionally Stable
+                {% endif %}
+            </div>
+            <h1 class="hero-title">
+                {% if top_severity in ['High', 'Severe', 'Moderate', 'Moderately Severe'] %}
+                Insights on your emotional wellbeing
+                {% else %}
+                Building a more resilient you
+                {% endif %}
+            </h1>
+            <p class="hero-subtitle">
+                We've analyzed your recent responses to provide a supportive look at your current state and actionable
+                steps forward.
+            </p>
+            <p style="font-size: 13px; color: #94a3b8;">This is not a medical diagnosis.</p>
+        </div>
+        <div class="hero-illustration breathing">
+            <img src="{{ url_for('static', filename='img/man_seating.png') }}" alt="Mental Clarity">
+        </div>
+    </div>
+
+    <!-- 2. Clean Summary Grid -->
+    <div class="summary-grid slide-up" style="animation-delay: 0.2s; margin-bottom: 32px;">
+        <div class="indicator-card">
+            <div class="indicator-header">
+                <span class="indicator-label">Overall Mood</span>
+                <div class="indicator-icon icon-mood">🧠</div>
+            </div>
+            <div class="indicator-state">
+                {% if mood_pred > 60 %}Challenging{% elif mood_pred > 30 %}Variable{% else %}Stable{% endif %}
+            </div>
+        </div>
+
+        <div class="indicator-card">
+            <div class="indicator-header">
+                <span class="indicator-label">Interest Level</span>
+                <div class="indicator-icon icon-interest">🎯</div>
+            </div>
+            <div class="indicator-state">
+                {% if interest_pred > 60 %}Low{% elif interest_pred > 30 %}Fluctuating{% else %}Healthy{% endif %}
+            </div>
+        </div>
+
+        <div class="indicator-card">
+            <div class="indicator-header">
+                <span class="indicator-label">Energy Reserves</span>
+                <div class="indicator-icon icon-energy">⚡</div>
+            </div>
+            <div class="indicator-state">
+                {% if energy_pred > 60 %}Drained{% elif energy_pred > 30 %}Reduced{% else %}Good{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 2.5 Personal Assessment Summary -->
+    {% if results.personalized_summary %}
+    <div class="section-card slide-up" style="animation-delay: 0.25s;">
+        <h2 class="section-title">Your Personal Assessment</h2>
+        <div
+            style="background: rgba(255, 255, 255, 0.02); padding: 30px; border-radius: 20px; border-left: 5px solid #3DEAB2; border: 1px solid rgba(255, 255, 255, 0.05);">
+            <h3 style="margin-top:0; color: #FFFFFF; font-size: 1.4rem; font-weight: 700; margin-bottom: 15px;">{{
+                results.personalized_summary.title }}</h3>
+            <p style="color: #A0AEC0; line-height: 1.7; font-size: 1.05rem; margin-bottom: 20px;">
+                {{ results.personalized_summary.content }}
+            </p>
+            <div
+                style="background: rgba(61, 234, 178, 0.1); padding: 15px 20px; border-radius: 12px; display: flex; gap: 12px; align-items: start;">
+                <span style="font-size: 1.2rem;">💡</span>
+                <span style="font-weight: 600; color: #3DEAB2; line-height: 1.5;">{{
+                    results.personalized_summary.suggestion }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 3. Pattern Analysis with Radial Progress -->
+    <div class="section-card slide-up" style="animation-delay: 0.3s;">
+        <h2 class="section-title">Pattern Analysis</h2>
+        <div class="analysis-list">
+            {% for pred in results.predictions[:3] %}
+
+            {% set bar_color = '#10b981' %}
+            {% if pred.probability > 40 %}{% set bar_color = '#34d399' %}{% endif %}
+            {% if pred.probability > 60 %}{% set bar_color = '#fbbf24' %}{% endif %}
+            {% if pred.probability > 80 %}{% set bar_color = '#ef4444' %}{% endif %}
+
+            <div class="analysis-item">
+                <div class="radial-progress" style="--percentage: {{ pred.probability }}%; --color: {{ bar_color }};">
+                    <div class="radial-inner">
+                        <span class="radial-value">{{ pred.probability }}%</span>
+                        <span class="radial-severity" style="color: {{ bar_color }};">{{ pred.severity }}</span>
+                    </div>
+                </div>
+                <div class="analysis-label">{{ pred.condition }}</div>
+            </div>
+            {% endfor %}
+
+            {% if not results.predictions %}
+            <p style="color: #64748b; width: 100%; text-align: center;">No significant patterns detected in current
+                responses.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 4. Text-Only Recommendations -->
+    <div class="section-card slide-up" style="animation-delay: 0.4s;">
+        <h2 class="section-title">What you can do next</h2>
+        <div class="rec-layout">
+            <div class="rec-list">
+                {% if results.recommendations %}
+                {% for rec in results.recommendations %}
+                <div class="rec-item">
+                    <div class="rec-main">
+                        <div class="rec-title">{{ rec.title }}</div>
+                        <div class="rec-desc">{{ rec.desc }}</div>
+                    </div>
+                    <div class="rec-meta">{{ rec.time }}</div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="rec-item">
+                    <div class="rec-main">
+                        <div class="rec-title">Take a Mindful Moment</div>
+                        <div class="rec-desc">Allow yourself 5 minutes of quiet reflection to acknowledge your feelings
+                            without judgment.</div>
+                    </div>
+                    <div class="rec-meta">5 Mins</div>
+                </div>
+                <div class="rec-item">
+                    <div class="rec-main">
+                        <div class="rec-title">Focus on Breath</div>
+                        <div class="rec-desc">Practice slow, deep breathing to help center your thoughts and reduce
+                            baseline
+                            stress.</div>
+                    </div>
+                    <div class="rec-meta">2 Mins</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <p style="color: #94a3b8; font-style: italic;">"Thank you for being honest with yourself."</p>
+        </div>
+    </div>
+
+    {% if results.get('user_answers') %}
+    <div class="section-card slide-up" style="animation-delay: 0.5s;">
+        <h2 class="section-title">Your Interview Responses</h2>
+        <button id="toggle-responses" class="btn-minimal" style="margin-bottom: 16px;">View Responses</button>
+        <div id="responses-section" style="display: none;">
+            <div style="margin-bottom: 16px;">
+                <p style="color: #64748b; font-size: 15px;">Here's a summary of the answers you provided during the
+                    assessment:</p>
+            </div>
+            <div class="answers-list">
+                {% for answer in results.user_answers %}
+                <div class="answer-item">
+                    <div class="answer-question">
+                        <span class="answer-number">Q{{ loop.index }}</span>
+                        <span class="answer-text">{{ answer.question }}</span>
+                    </div>
+                    <div class="answer-response">
+                        <span class="answer-value">{{ answer.answer }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var btn = document.getElementById('toggle-responses');
+            var section = document.getElementById('responses-section');
+            if (btn && section) {
+                btn.addEventListener('click', function () {
+                    var isHidden = section.style.display === 'none';
+                    section.style.display = isHidden ? 'block' : 'none';
+                    btn.textContent = isHidden ? 'Hide Responses' : 'View Responses';
+                });
+            }
+        })();
+    </script>
+    {% endif %}
+
+    <div class="footer-actions slide-up" style="animation-delay: 0.6s; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('interview') }}" class="btn-minimal" style="background: rgba(255,255,255,0.07); color:#fff; border: 1px solid rgba(255,255,255,0.15);">Retake Assessment</a>
+        <a href="{{ url_for('dashboard') }}" class="btn-minimal">View Progress</a>
+    </div>
+</div>
+{% endblock %}
