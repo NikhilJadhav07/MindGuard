@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/xino_theme.css') }}">
+
+<div class="xino-container">
+    <!-- Welcome View -->
+    <div id="xino-welcome-view" class="xino-welcome">
+        <div style="margin-bottom: 20px;">
+            <div class="xino-category-icon" style="margin: 0 auto 32px auto; background: rgba(61, 234, 178, 0.1); color: var(--xino-accent); width: 64px; height: 64px; border-radius: 20px;">🧘</div>
+        </div>
+
+        <h1 id="user-greeting">HI {{ current_user.name.split(' ')[0].upper() if current_user.is_authenticated else 'FRIEND' }} !</h1>
+        <div class="sub">What Do You Want To Chat About Today?</div>
+
+        <div class="xino-categories">
+            <div class="xino-category-card" onclick="useChip('I am feeling emotionally overwhelmed and need someone to talk to.')">
+                <div class="xino-category-icon">🌿</div>
+                <div class="xino-category-info">
+                    <h3>Emotional Support</h3>
+                    <p>I'm feeling overwhelmed or anxious.</p>
+                </div>
+            </div>
+            <div class="xino-category-card" onclick="useChip('Can you guide me through a quick mindfulness or breathing exercise?')">
+                <div class="xino-category-icon">✨</div>
+                <div class="xino-category-info">
+                    <h3>Mindfulness & Calm</h3>
+                    <p>Guide me through a relaxation exercise.</p>
+                </div>
+            </div>
+            <div class="xino-category-card" onclick="useChip('I need some coping strategies for managing stress right now.')">
+                <div class="xino-category-icon">🛡️</div>
+                <div class="xino-category-info">
+                    <h3>Crisis & Coping</h3>
+                    <p>Strategies for managing difficult moments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat View (Initially Hidden) -->
+    <div id="xino-chat-view" class="chat-layout xino-style hidden">
+        <header class="xino-chat-header">
+            <button class="icon-btn" onclick="location.reload()" style="position: absolute; left: 0; background: rgba(255, 255, 255, 0.05); width: 44px; height: 44px; border-radius: 50%; color: white;">✕</button>
+            <div class="title">MindGuard Assistant</div>
+        </header>
+
+        <div class="chat-window xino-style" id="chat-window">
+            <!-- Messages injected here -->
+        </div>
+    </div>
+
+    <!-- Listening View (Optional/Transitions) -->
+    <div id="xino-listening-view" class="xino-listening hidden">
+        <div class="listening-orb"></div>
+        <div class="sub" style="font-size: 1.2rem; color: white; margin-bottom: 20px;">Listening</div>
+        <h2 style="font-size: 2.5rem; font-weight: 400; max-width: 600px; line-height: 1.3;">
+            Hey <span style="font-weight: 900;">MindGuard</span>, can you help plan a weekend trip to the mountains?
+        </h2>
+    </div>
+
+    <!-- Persistent Input Area -->
+    <div class="xino-input-container">
+        <div class="xino-input-wrapper">
+            <input type="text" id="chat-input" placeholder="What is on your mind?" onkeypress="handleEnter(event)">
+            <button class="icon-btn">🔍</button>
+        </div>
+        <button class="send-btn-round" onclick="sendMessage()">
+            <span style="font-size: 1.5rem;">↑</span>
+        </button>
+    </div>
+</div>
+
+<script>
+    // Theme application to body
+    document.body.classList.add('xino-theme');
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Override script.js behavior for new UI
+        const originalAddMessage = window.addMessageToChat;
+        
+        window.addMessageToChat = function(text, sender) {
+            // Change views if first message
+            const welcomeView = document.getElementById('xino-welcome-view');
+            const chatView = document.getElementById('xino-chat-view');
+            if (welcomeView && !welcomeView.classList.contains('hidden')) {
+                welcomeView.classList.add('hidden');
+                chatView.classList.remove('hidden');
+            }
+
+            const chatWindow = document.getElementById('chat-window');
+            if (!chatWindow) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message xino-style ${sender}`;
+            
+            const avatarImg = document.createElement('img');
+            avatarImg.className = 'avatar';
+            avatarImg.src = sender === 'bot' ? "/static/img/xino_avatar.png" : "/static/img/user_avatar.png";
+            
+            const contentArea = document.createElement('div');
+            contentArea.className = 'content-area';
+            
+            const nameLabel = document.createElement('span');
+            nameLabel.className = 'sender-name';
+            nameLabel.textContent = sender === 'bot' ? 'MindGuard' : 'You';
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            if (sender === 'bot') {
+                if (typeof marked !== 'undefined') {
+                    bubble.innerHTML = marked.parse(text);
+                } else {
+                    bubble.innerText = text;
+                }
+                bubble.querySelectorAll('p').forEach(p => p.style.margin = '0 0 10px 0');
+                const lastP = bubble.querySelector('p:last-child');
+                if (lastP) lastP.style.margin = '0';
+            } else {
+                bubble.innerText = text;
+            }
+
+            contentArea.appendChild(nameLabel);
+            contentArea.appendChild(bubble);
+            messageDiv.appendChild(avatarImg);
+            messageDiv.appendChild(contentArea);
+            
+            chatWindow.appendChild(messageDiv);
+            
+            // Scroll
+            requestAnimationFrame(() => {
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            });
+        };
+
+        // Focus input
+        document.getElementById('chat-input').focus();
+    });
+</script>
+{% endblock %}
