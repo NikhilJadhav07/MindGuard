@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment | MindGuard</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/symptomate.css') }}">
+</head>
+
+<body>
+    <!-- User Context Data for JS -->
+    <div id="user-context" data-auth="{{ 'true' if current_user.is_authenticated else 'false' }}"
+        data-age="{{ current_user.age if current_user.is_authenticated and current_user.age else '' }}"
+        data-gender="{{ current_user.gender if current_user.is_authenticated and current_user.gender else '' }}"
+        data-dominant="{{ profile_context.dominant_condition if profile_context else '' }}"
+        data-freq='{{ profile_context.frequent_symptoms | tojson if profile_context else "[]" }}'>
+    </div>
+
+    <div class="app-container">
+        <!-- LEFT SIDEBAR (25%) -->
+        <aside class="sidebar-panel">
+            <div class="sidebar-brand">
+                <a href="/" style="text-decoration: none; color: inherit;">
+                    <h2 style="color: #3DEAB2; font-weight: 700; margin: 0;">MindGuard</h2>
+                </a>
+            </div>
+
+            <nav class="progress-nav">
+                <div class="nav-step active" id="step-intro">
+                    <div class="step-marker"></div>
+                    <span class="step-text">Introduction</span>
+                </div>
+                <div class="nav-step" id="step-patient">
+                    <div class="step-marker"></div>
+                    <span class="step-text">Patient</span>
+                </div>
+                <div class="nav-step" id="step-symptoms">
+                    <div class="step-marker"></div>
+                    <span class="step-text">Symptoms</span>
+                </div>
+                <div class="nav-step" id="step-regions">
+                    <div class="step-marker"></div>
+                    <span class="step-text">Regions</span>
+                </div>
+                <div class="nav-step" id="step-interview">
+                    <div class="step-marker"></div>
+                    <span class="step-text">Interview</span>
+                </div>
+                <div class="nav-step" id="step-results">
+                    <div class="step-marker"></div>
+                    <span class="step-text">Results</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- RIGHT CONTENT (75%) -->
+        <main class="content-panel">
+            <div class="content-wrapper">
+
+                <div class="card-container">
+                    <!-- STAGE 1: INTRO -->
+                    <div id="view-intro" class="view-section">
+                        <div class="illustration-box breathing">
+                            <img src="{{ url_for('static', filename='img/question.png') }}"
+                                alt="Calm Abstract Illustration">
+                        </div>
+                        <h1 class="page-title">Let’s check in on how you’ve been feeling.</h1>
+                        <p class="page-subtitle">This short assessment helps us understand your mental well-being. It’s
+                            private, anonymous, and takes only a few minutes.</p>
+
+                        <div class="action-bar">
+                            <button id="btn-next" class="btn-next">Begin Assessment</button>
+                        </div>
+                    </div>
+
+                    <!-- STAGE 2: PATIENT -->
+                    <div id="view-patient" class="view-section"
+                        style="display:none; text-align: left; align-items: flex-start;">
+                        <h1 class="page-title" style="font-size: 28px;">About You</h1>
+                        <p class="page-subtitle">These details help us tailor the assessment.</p>
+
+                        <div style="width: 100%; margin-bottom: 32px;">
+                            <label
+                                style="font-weight: 600; display: block; margin-bottom: 12px; color: var(--text-secondary);">Age</label>
+                            <input type="number" id="input-age" class="huge-input" placeholder="e.g. 30" min="18"
+                                max="130" style="text-align: left;">
+                            <div class="error-msg" id="age-error"
+                                style="display:none; color: #dc3545; margin-top: 10px; font-size: 14px;">
+                                Please enter a valid age (18-130).</div>
+                        </div>
+
+                        <div style="width: 100%;">
+                            <label
+                                style="font-weight: 600; display: block; margin-bottom: 12px; color: var(--text-secondary);">Gender</label>
+                            <div class="gender-select">
+                                <input type="radio" class="btn-check" name="gender" id="male" value="Male">
+                                <label class="gender-btn" for="male">Male</label>
+
+                                <input type="radio" class="btn-check" name="gender" id="female" value="Female">
+                                <label class="gender-btn" for="female">Female</label>
+
+                                <input type="radio" class="btn-check" name="gender" id="other" value="Other">
+                                <label class="gender-btn" for="other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STAGE 3: SYMPTOMS -->
+                    <div id="view-symptoms" class="view-section"
+                        style="display:none; text-align: left; align-items: flex-start;">
+                        <h1 class="page-title">What is bothering you?</h1>
+                        <p class="page-subtitle">Briefly describe your main feeling or symptom.</p>
+                        <input type="text" id="input-symptom" class="huge-input"
+                            placeholder="e.g. Constant anxiety, trouble sleeping..." style="text-align: left;">
+
+                        <!-- Common Symptoms Chips -->
+                        <div style="margin-top: 24px;">
+                            <p
+                                style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px; font-weight: 500;">
+                                COMMON SYMPTOMS</p>
+                            <div class="chip-container" id="symptom-chips">
+                                <button class="symptom-chip" onclick="selectSymptom('Headache')">Headache</button>
+                                <button class="symptom-chip" onclick="selectSymptom('Anxiety')">Anxiety</button>
+                                <button class="symptom-chip" onclick="selectSymptom('Insomnia')">Insomnia</button>
+                                <button class="symptom-chip" onclick="selectSymptom('Fatigue')">Fatigue</button>
+                                <button class="symptom-chip" onclick="selectSymptom('Low Mood')">Low Mood</button>
+                                <button class="symptom-chip" onclick="selectSymptom('Panic Attacks')">Panic
+                                    Attacks</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STAGE 4: REGIONS -->
+                    <div id="view-regions" class="view-section"
+                        style="display:none; text-align: left; align-items: flex-start;">
+                        <div id="progress-inline" class="progress-inline">Step 4 of 6 • This helps us ask better
+                            questions</div>
+                        <h1 class="page-title">Let’s start with what’s been affecting you lately.</h1>
+                        <p class="page-subtitle">You can choose one area or skip if you’re unsure.</p>
+                        <div id="history-note" class="past-ref-badge" style="display:none;">Based on your last checkup
+                        </div>
+                        <div id="region-grid" class="region-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- STAGE 5: INTERVIEW -->
+                    <div id="view-interview" class="view-section" style="display:none;">
+                        <div id="question-container" style="width: 100%;">
+                            <!-- Dynamic Question -->
+                            <div style="text-align: center; color: #86868B;">Loading questions...</div>
+                        </div>
+                    </div>
+
+                    <!-- STAGE 6: RESULTS -->
+                    <div id="view-results" class="view-section" style="display:none;">
+                        <h1 class="page-title">Analysis Complete</h1>
+                        <p class="page-subtitle">Generating your personalized report...</p>
+                        <div class="loading-spinner"></div>
+                    </div>
+
+                    <!-- Global Navigation (Hidden during Intro) -->
+                    <div id="global-action-bar" class="action-bar" style="display:none;">
+                        <button id="btn-back-main" class="btn-back">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            Back
+                        </button>
+                        <button id="btn-next-main" class="btn-next">Next</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='interview.js') }}"></script>
+</body>
+
+</html>
