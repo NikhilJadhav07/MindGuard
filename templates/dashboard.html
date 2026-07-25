@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    /* MindGuard Dark Theme for Dashboard */
+    body {
+        background: radial-gradient(circle at 50% -20%, #1a2a24 0%, #0B0E11 70%);
+        color: #FFFFFF;
+        min-height: 100vh;
+    }
+
+    .dashboard-container {
+        padding-top: 80px;
+        padding-bottom: 80px;
+        max-width: 1100px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #FFFFFF 0%, #3DEAB2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .dashboard-header p {
+        color: #A0AEC0;
+        font-size: 18px;
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 40px;
+        margin-bottom: 40px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .glass-panel:hover {
+        transform: translateY(-5px);
+        border-color: rgba(61, 234, 178, 0.2);
+    }
+
+    .panel-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .panel-title::before {
+        content: '';
+        width: 6px;
+        height: 28px;
+        background: #3DEAB2;
+        border-radius: 10px;
+    }
+
+    .panel-title small {
+        font-size: 14px;
+        color: #A0AEC0;
+        font-weight: 400;
+        margin-left: auto;
+    }
+
+    /* Insights Content */
+    .insight-card {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 25px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 20px;
+    }
+
+    .risk-name {
+        font-weight: 700;
+        font-size: 17px;
+        color: #FFFFFF;
+    }
+
+    .severity-badge {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .severity-high { background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+    .severity-moderate { background: rgba(245, 158, 11, 0.1); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.2); }
+    .severity-stable { background: rgba(61, 234, 178, 0.1); color: #3DEAB2; border: 1px solid rgba(61, 234, 178, 0.2); }
+
+    .xino-progress {
+        height: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        margin-top: 12px;
+        overflow: hidden;
+    }
+
+    .xino-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #3DEAB2 0%, #20BFA9 100%);
+        border-radius: 10px;
+        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .rec-item-dash {
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .rec-item-dash:last-child {
+        border-bottom: none;
+    }
+
+    .rec-title-dash {
+        color: #3DEAB2;
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+
+    .rec-desc-dash {
+        color: #A0AEC0;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* Chart Overrides */
+    #chart-wrapper {
+        position: relative;
+        height: 400px;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container { padding-top: 40px; }
+        .glass-panel { padding: 25px; }
+    }
+</style>
+
+<div class="container dashboard-container">
+    <div class="dashboard-header text-center mb-5">
+        <h1>Your Wellness Dashboard</h1>
+        <p>Perspective on your journey with MindGuard.</p>
+    </div>
+
+    <!-- Latest Insights Section -->
+    {% if latest_result %}
+    <div class="glass-panel slide-up">
+        <div class="panel-title">
+            Latest Analysis
+            <small>{{ latest_result.date.strftime('%B %d, %Y') }}</small>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <h5 class="mb-4" style="color: #A0AEC0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Pattern Indicators</h5>
+                {% if latest_result.data.predictions %}
+                {% for pred in latest_result.data.predictions[:3] %}
+                <div class="insight-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="risk-name">{{ pred.condition }}</span>
+                        {% set sev_class = 'severity-stable' %}
+                        {% if pred.severity in ['High', 'Severe'] %}{% set sev_class = 'severity-high' %}
+                        {% elif pred.severity in ['Moderate', 'Moderately Severe'] %}{% set sev_class = 'severity-moderate' %}{% endif %}
+                        <span class="severity-badge {{ sev_class }}">{{ pred.severity }}</span>
+                    </div>
+                    <div class="xino-progress">
+                        <div class="xino-progress-bar" style="width: {{ pred.probability }}%"></div>
+                    </div>
+                    {% if pred.contributors %}
+                    <p class="mt-2 mb-0" style="font-size: 13px; color: #718096;">
+                        <i class="opacity-75">Influenced by:</i> {{ pred.contributors | join(', ') }}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="color: #718096;">No significant patterns detected.</p>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6" style="border-left: 1px solid rgba(255, 255, 255, 0.05);">
+                <div class="ps-md-4">
+                    <h5 class="mb-4" style="color: #A0AEC0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Priority Actions</h5>
+                    <div class="rec-list-dash">
+                        {% if latest_result.data.recommendations %}
+                        {% for rec in latest_result.data.recommendations[:4] %}
+                        <div class="rec-item-dash">
+                            <div class="rec-title-dash">{{ rec.title }}</div>
+                            <div class="rec-desc-dash">{{ rec.desc }}</div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="rec-item-dash">
+                            <div class="rec-title-dash">Keep Going</div>
+                            <div class="rec-desc-dash">Stay consistent with self-check-ins. Complete another assessment for personalized recommendations.</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="glass-panel slide-up" style="text-align: center; padding: 60px 40px;">
+        <div style="font-size: 48px; margin-bottom: 20px;">🌱</div>
+        <h3 style="color: #FFFFFF; font-weight: 700; margin-bottom: 15px;">No assessments yet</h3>
+        <p style="color: #A0AEC0; max-width: 420px; margin: 0 auto 30px;">Take your first mental health assessment to start tracking your emotional trends over time.</p>
+        <a href="/interview" class="btn btn-success" style="background:#3DEAB2; color:#0B0E11; border:none; padding:14px 32px; border-radius:100px; font-weight:700;">Start Assessment</a>
+    </div>
+    {% endif %}
+
+    <!-- History Chart Section -->
+    <div class="glass-panel slide-up" style="animation-delay: 0.2s;">
+        <div class="panel-title">Emotional Trends</div>
+        <div id="chart-wrapper">
+            <canvas id="trendChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        
+        // Use MindGuard theme colors for datasets
+        const themeColors = [
+            '#3DEAB2', // Vibrant Green
+            '#A78BFA', // Soft Purple
+            '#F87171', // Soft Red
+            '#60A5FA', // Soft Blue
+            '#FBBF24'  // Soft Amber
+        ];
+
+        const dates = {{ dates | tojson }};
+        const rawDataset = {{ dataset | tojson }};
+
+        // Style the datasets
+        const formattedDataset = rawDataset.map((ds, index) => ({
+            ...ds,
+            borderColor: themeColors[index % themeColors.length],
+            backgroundColor: themeColors[index % themeColors.length] + '20', // Add transparency
+            borderWidth: 3,
+            pointBackgroundColor: themeColors[index % themeColors.length],
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            tension: 0.4,
+            fill: true
+        }));
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: formattedDataset
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#A0AEC0',
+                            font: { family: 'Outfit', size: 14, weight: '600' },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(11, 14, 17, 0.9)',
+                        titleColor: '#3DEAB2',
+                        bodyColor: '#FFFFFF',
+                        cornerRadius: 12,
+                        padding: 15,
+                        displayColors: true
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#718096', font: { family: 'Outfit' } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#718096', font: { family: 'Outfit' } }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
