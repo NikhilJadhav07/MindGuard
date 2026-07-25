@@ -587,11 +587,9 @@ This project is backed by peer-reviewed academic research:
 **Title**: "AI-Powered Mental Wellness Assistant Using Machine Learning and NLP for Early Detection and Personalized Recommendation"
 
 **Authors**:
-- Mrs. Nutan A. Dheringe (Professor)
-- Laveeza V. Sayed (Co-author)
-- Atharva S. Godse (Co-author)
+- Mrs. Charushila s. Patil (Professor)
 - **Nikhil D. Jadhav** (Lead Developer) ⭐
-- Saurabh A. Shinde (Co-author)
+
 
 **Institution**: Guru Gobind Singh College of Engineering and Research Centre, Nashik, Maharashtra, India
 
@@ -683,14 +681,8 @@ Conditions:
 - 📧 Email: nikhiljadhav2782@gmail.com
 - 🔗 LinkedIn: [linkedin.com/in/nikhil-jadhav-347520423](https://www.linkedin.com/in/nikhil-jadhav-347520423)
 - 📍 Location: Nashik, Maharashtra, India
-- 🎓 Education: B.E. in AI & Data Science (GGSIPU, 2026)
+- 🎓 Education: B.E. in AI & Data Science (GGSF, 2026)
 - 💼 Experience: Netleap AI & Data Science Intern
-
-### Co-Authors & Contributors
-- **Mrs. Nutan A. Dheringe** - Professor & Research Advisor
-- **Laveeza V. Sayed** - Co-developer
-- **Atharva S. Godse** - Co-developer
-- **Saurabh A. Shinde** - Co-developer
 
 ---
 
@@ -759,7 +751,7 @@ If you use this project in your research, please cite:
 ```bibtex
 @article{MindGuard2025,
   title={AI-Powered Mental Wellness Assistant Using Machine Learning and NLP for Early Detection and Personalized Recommendation},
-  author={Dheringe, Nutan A. and Sayed, Laveeza V. and Godse, Atharva S. and Jadhav, Nikhil D. and Shinde, Saurabh A.},
+  author={ Nikhil D.Jadhav },
   journal={Journal of AI and Mental Health},
   year={2025},
   institution={Guru Gobind Singh College of Engineering and Research Centre},
