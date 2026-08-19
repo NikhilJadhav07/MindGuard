@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
 [![ML Models](https://img.shields.io/badge/ML%20Accuracy-88%25-brightgreen.svg)](#ml-architecture)
-[![Research Paper](https://img.shields.io/badge/Academic-Peer%20Reviewed-orange.svg)](#research-paper)
+[![Research Published](https://img.shields.io/badge/Research-Published-blue.svg)](#-research-publication)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > **An AI-driven mental wellness screening system combining machine learning, natural language processing, and personalized recommendation engine to support early detection of stress, anxiety, and depression.**
@@ -582,7 +582,7 @@ See `IMPROVEMENTS_SUMMARY.md` for detailed roadmap.
 
 ## 📜 Research Paper
 
-This project is backed by peer-reviewed academic research:
+This project resulted in the publication of a research paper in the Journal of International Research for Engineering & Management (JOIREM), focusing on the application of Machine Learning and Natural Language Processing (NLP) for mental wellness screening and personalized recommendations:
 
 **Title**: "AI-Powered Mental Wellness Assistant Using Machine Learning and NLP for Early Detection and Personalized Recommendation"
 
@@ -600,7 +600,11 @@ This project is backed by peer-reviewed academic research:
 - Evidence-based recommendation engine
 - Ethical framework for mental health AI
 
-**Download**: Research paper available in project repository
+🔗 Publication
+
+📄 Read the Published Research Paper
+
+🌐 Journal of International Research for Engineering & Management (JOIREM)
 
 ---
 
@@ -699,10 +703,9 @@ Conditions:
 ## 📈 Project Highlights
 
 ### Awards & Recognition
-- ✅ Peer-reviewed academic research paper
+- ✅ Published Research Paper
 - ✅ Capstone project of engineering curriculum
 - ✅ College recognized innovation
-- ✅ Published research findings
 
 ### Media Coverage
 - Featured in college magazine
